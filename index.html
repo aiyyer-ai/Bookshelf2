@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bookshelf Code</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+        <div class="allData">
+          <div class="title">Bookshelf Query</div>
+          <div class="rules">
+            Current rules:
+            <br>
+            <input type="checkbox" name="rule1" id="rule1" class="checkboxes">
+            Traits cannot touch another of the same trait
+            <br>
+            <input type="checkbox" name="rule2" id="rule2" class="checkboxes">
+            Traits must be in series order (No repeated results)
+            <br>
+            <input type="checkbox" name="rule3" id="rule3" class="checkboxes">
+            Traits must be palindromic
+          </div>
+          <div class="options">
+            <input inputmode="numeric" name="trait1A" id="trait1A" class="inputs" placeholder="Trait 1A" maxlength="1">
+            <input inputmode="numeric" name="trait1B" id="trait1B" class="inputs" placeholder="Trait 1B" maxlength="1">
+            <input inputmode="numeric" name="trait1C" id="trait1C" class="inputs" placeholder="Trait 1C" maxlength="1"> 
+            <input type="submit" onclick="tryValues()" id="submit" class="button" value="Submit">
+            <br>
+          </div>
+          <div class="results" id="results"></div>
+          <button class="button" style="display: none;" id="tryThis">Try it!</button>
+        </div>
+        <div class="lights" id="lights"></div>
+        <div class="game" id="game"></div>
+    </main>
+	<script src="script.js"></script>
+  </body>
+</html>
