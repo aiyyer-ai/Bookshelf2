@@ -69,8 +69,16 @@ html {
 
 .game {
 	background-color: #581c20;
-	margin: auto;
-	margin-top: 10px;
+  	margin: auto;
+  	display: grid;
+  	grid-auto-flow: column;
+  	grid-auto-columns: 1fr;
+}
+
+.bookHoles {
+	background-color: #231631;
+	margin-left: 3px;
+	margin-right: 3px;
 }
 
 .books {
@@ -78,7 +86,8 @@ html {
 	background-color: #8b4937;
 	text-align: center;
 	color: #c39054;
-	font-size: 400%;
+	font-size: 200%;
+	overflow-wrap: anywhere;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -92,4 +101,32 @@ html {
 	text-align: center;
 	margin: auto;
 	margin-bottom: 5px;
+}
+
+.indicators {
+	background-color: #31302c;
+	text-align: center;
+	display: flex;
+	margin: auto;
+	margin-bottom: 2px;
+	margin-top: 5px;
+}
+
+.indicator {
+	background-color: #186132;
+	flex: 1;
+	margin-left: 5px;
+	margin-top: 10px;
+	margin-right: 5px;
+}
+
+.allClues {
+	display: flex;
+	margin: auto;
+	opacity: .85;
+}
+
+.clue {
+	flex: 1;
+	margin: 5px;
 }
