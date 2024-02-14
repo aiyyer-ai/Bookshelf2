@@ -84,9 +84,13 @@ html {
 .books {
 	position: absolute;
 	background-color: #8b4937;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	text-align: center;
 	color: #c39054;
 	font-size: 200%;
+	writing-mode: tb-rl;
 	overflow-wrap: anywhere;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -129,4 +133,8 @@ html {
 .clue {
 	flex: 1;
 	margin: 5px;
+}
+
+.books2:hover {
+	cursor:not-allowed
 }

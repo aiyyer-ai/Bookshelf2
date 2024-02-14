@@ -1,16 +1,26 @@
 var trait1Name = `A`;
 var trait2Name = `B`;
 var trait3Name = `C`;
-var historyTitles = [`History 1700s`, `History 1800s`, `History 1900s`, `History 2000s`];
+var historyTitles = [`America's Beginnings: 1700s`, `The Age of Revolution: 1800s`, `The Mechanical Era: 1900s`, `The Information Age: 2000s`];
 var mathTitles = [`Algebra`, `Calculus`];
 var artTitles = [`Modern Art`];
+var clue1Titles1 = [`Roman Empire <br> 220 AD - 476 AD`, `Roman Empire <br> 625 BC - 120 BC`, `Roman Empire <br> 1 AD - 220 AD`, `Roman Empire <br> 120 BC - 1 AD`];
+var clue1Titles2 = [`Intermediate Economics`, `Introduction to Economics`];
+var clue1Titles3 = [`Music Theory`];
+var clue2Titles1 = [`Encyclopedia Volume I`, `Encyclopedia Volume II`, `Encyclopedia Volume III`, `Encyclopedia Volume IV`];
+var clue2Titles2 = [`Basic Spanish Dictionary`, `Advanced Spanish Dictionary`];
+var clue2Titles3 = [`Animal Crossing: City Folk Guide`];
 var allInputs = document.getElementsByClassName('inputs');
 var snapToWidth = [];
+var snapToWidthClue1 = [];
+var snapToWidthClue2 = [];
 var bookPositions = {};
 var gameScreen = document.getElementById("game");
 var totalBooks, correctAnswer;
 var rule1TraitOrder = `ABABACA`;
+var rule1LightsOn = [true, false, false];
 var rule2TraitOrder = `AACAABB`;
+var rule2LightsOn = [false, true, false];
 
 Array.from(allInputs).forEach(function(singleInput){
   singleInput.addEventListener("keyup", function(event) {
@@ -148,7 +158,7 @@ function dragElement(elmnt) {
         document.onmouseup = null;
         document.onmousemove = null;
         elmnt.style.zIndex = `0`;
-        elmnt.style.top = `${gameScreen.offsetTop + 30}px`;
+        elmnt.style.top = `${gameScreen.offsetTop}px`;
         let placeLocation = closest(e.clientX,snapToWidth);
         let oldLocation = bookPositions[elmnt.id];
         let newLocationBookID = getKeyByValue(bookPositions, placeLocation);
@@ -278,6 +288,9 @@ function startGame(permutationArray, startData) {
 				indicatorLight.id = `${singleInput.id}Indicator`;		
 			} else{
 				indicatorLight.id = `${singleInput.id}Indicator${Array.from(indicatorLights).indexOf(singleIndicator)}`;
+				if(indicatorLight.id == `rule1Indicator1` || indicatorLight.id == `rule2Indicator2`) {
+					indicatorLight.style.backgroundColor = `#b0e476`;
+				}
 			}
 
 			indicatorLight.style.width = `4vh`;
@@ -290,40 +303,9 @@ function startGame(permutationArray, startData) {
 	let allClues = document.getElementById(`allClues`);
 	allClues.style.height = `40vh`;
 	allClues.style.width = `90vw`;
-	let clue1Books = document.getElementById(`clue1Books`);
-	clue1Books.style.height = `30vh`;
-	clue1Books.style.width = `45vw`;
-	let bookNum = 1;
-	for (let i = 0; i < totalBooks; i++) {
-		let bookDiv = document.createElement("div");
-		bookDiv.classList.add(`books`);
-		if(rule1TraitOrder.charAt(i) == rule1TraitOrder.charAt(i-1)) {
-			bookNum++;
-		} else {
-			bookNum = 1;
-		}
-		if (rule1TraitOrder.charAt(i) == `A`) {
-			bookDiv.innerHTML = `${historyTitles[bookNum-1]}`;
-			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${bookNum}`;
-		} else if (rule1TraitOrder.charAt(i) == `B`) {
-			bookDiv.innerHTML = `${mathTitles[bookNum-1]}`;
-			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${bookNum}`;
-		} else {
-			bookDiv.innerHTML = `${artTitles[bookNum-1]}`;
-			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${bookNum}`;
-		}
-		bookDiv.id = `bookDiv${i}Clue1`;
-		//bookDiv.style.height = `35vh`;
-		//bookDiv.style.width = `${(40 / totalBooks)}vw`;
-		clue1Books.appendChild(bookDiv);
-	}
-	let clue2Books = document.getElementById(`clue2Books`);
-	clue2Books.style.height = `30vh`;
-	clue2Books.style.width = `45vw`;
-	for (let i = 0; i < totalBooks; i++) {
 
-	}
-	bookNum = 1;
+	let bookNum = 1;
+	let actualSizes = [];
 	for (let i = 0; i < totalBooks; i++) {
 		let bookDivHole = document.createElement("div");
 		bookDivHole.classList.add(`bookHoles`);
@@ -347,9 +329,8 @@ function startGame(permutationArray, startData) {
 		bookDiv.id = `bookDiv${i}`;
 		dragElement(bookDiv);
 		gameScreen.appendChild(bookDivHole);
-		console.log(bookDivHole);
-		bookDiv.style.height = `${bookDivHole.clientHeight}px`;
-		bookDiv.style.width = `${bookDivHole.clientWidth}px`;
+		actualSizes[0] = `${bookDivHole.clientHeight}px`;
+		actualSizes[1] = `${bookDivHole.clientWidth}px`;
 		bookDivHole.appendChild(bookDiv);
 		// for (let i = 0; i < 5; i++) {
 		// 	let lightDiv = document.createElement("div");
@@ -367,11 +348,16 @@ function startGame(permutationArray, startData) {
 		// 	bookDiv.appendChild(lightDiv);
 		// }
 		let snapToDistance = gameScreen.clientWidth / totalBooks;
-		snapToWidth.push(Math.ceil(i * snapToDistance) + gameScreen.offsetLeft + 8);
+		snapToWidth.push(Math.ceil(i * snapToDistance) + gameScreen.offsetLeft + 3);
 		bookDiv.style.left = `${snapToWidth[snapToWidth.length - 1]}px`;
-		bookDiv.style.top = `${gameScreen.offsetTop + 30}px`;
+		bookDiv.style.top = `${gameScreen.offsetTop}px`;
 		bookPositions[bookDiv.id] = snapToWidth[snapToWidth.length - 1];
 	}
+	let allBooks = document.getElementsByClassName('books');
+	Array.from(allBooks).forEach(function(singleBooks){
+		singleBooks.style.height = actualSizes[0];
+		singleBooks.style.width = actualSizes[1];
+	});
 	let snapPointArray = Object.values(bookPositions);
 	let idArray = Object.keys(bookPositions);
 	shuffle(idArray);
@@ -380,6 +366,79 @@ function startGame(permutationArray, startData) {
 		idDiv.style.left = `${snapToWidth[idArray.indexOf(id)]}px`;
 		bookPositions[id] = snapToWidth[idArray.indexOf(id)];
 	}
+	let clue1Books = document.getElementById(`clue1Books`);
+	clue1Books.style.height = `30vh`;
+	clue1Books.style.width = `45vw`;
+	let letterArrayBottomBooks = [0, 0, 0];
+	for (let i = 0; i < totalBooks; i++) {
+		let bookDivHole = document.createElement("div");
+		bookDivHole.classList.add(`bookHoles`);
+		let bookDiv = document.createElement("div");
+		bookDiv.classList.add(`books2`);
+		bookDiv.classList.add(`books`);
+		if (rule1TraitOrder.charAt(i) == `A`) {
+			letterArrayBottomBooks[0]++;
+			bookDiv.innerHTML = `${clue1Titles1[letterArrayBottomBooks[0]-1]}`;
+			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${letterArrayBottomBooks[0]}`;
+		} else if (rule1TraitOrder.charAt(i) == `B`) {
+			letterArrayBottomBooks[1]++;
+			bookDiv.innerHTML = `${clue1Titles2[letterArrayBottomBooks[1]-1]}`;
+			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${letterArrayBottomBooks[1]}`;
+		} else {
+			letterArrayBottomBooks[2]++;
+			bookDiv.innerHTML = `${clue1Titles3[letterArrayBottomBooks[2]-1]}`;
+			bookDiv.altID = `${rule1TraitOrder.charAt(i)}${letterArrayBottomBooks[2]}`;
+		}
+		bookDiv.id = `bookDiv${i}Clue1`;
+		clue1Books.appendChild(bookDivHole);
+		actualSizes[0] = `${bookDivHole.clientHeight}px`;
+		actualSizes[1] = `${bookDivHole.clientWidth}px`;
+		bookDivHole.appendChild(bookDiv);
+		let snapToDistance = clue1Books.clientWidth / totalBooks;
+		snapToWidthClue1.push(Math.ceil(i * snapToDistance) + clue1Books.offsetLeft + 3);
+		bookDiv.style.left = `${snapToWidthClue1[snapToWidthClue1.length - 1]}px`;
+		bookDiv.style.top = `${clue1Books.offsetTop}px`;
+		bookPositions[bookDiv.id] = snapToWidthClue1[snapToWidthClue1.length - 1];
+	}
+	let clue2Books = document.getElementById(`clue2Books`);
+	clue2Books.style.height = `30vh`;
+	clue2Books.style.width = `45vw`;
+	letterArrayBottomBooks = [0, 0, 0];
+	for (let i = 0; i < totalBooks; i++) {
+		let bookDivHole = document.createElement("div");
+		bookDivHole.classList.add(`bookHoles`);
+		let bookDiv = document.createElement("div");
+		bookDiv.classList.add(`books2`);
+		bookDiv.classList.add(`books`);
+		if (rule2TraitOrder.charAt(i) == `A`) {
+			letterArrayBottomBooks[0]++;
+			bookDiv.innerHTML = `${clue2Titles1[letterArrayBottomBooks[0]-1]}`;
+			bookDiv.altID = `${rule2TraitOrder.charAt(i)}${letterArrayBottomBooks[0]}`;
+		} else if (rule2TraitOrder.charAt(i) == `B`) {
+			letterArrayBottomBooks[1]++;
+			bookDiv.innerHTML = `${clue2Titles2[letterArrayBottomBooks[1]-1]}`;
+			bookDiv.altID = `${rule2TraitOrder.charAt(i)}${letterArrayBottomBooks[1]}`;
+		} else {
+			letterArrayBottomBooks[2]++;
+			bookDiv.innerHTML = `${clue2Titles3[letterArrayBottomBooks[2]-1]}`;
+			bookDiv.altID = `${rule2TraitOrder.charAt(i)}${letterArrayBottomBooks[2]}`;
+		}
+		bookDiv.id = `bookDiv${i}Clue2`;
+		clue2Books.appendChild(bookDivHole);
+		actualSizes[0] = `${bookDivHole.clientHeight}px`;
+		actualSizes[1] = `${bookDivHole.clientWidth}px`;
+		bookDivHole.appendChild(bookDiv);
+		let snapToDistance = clue2Books.clientWidth / totalBooks;
+		snapToWidthClue2.push(Math.ceil(i * snapToDistance) + clue2Books.offsetLeft + 3);
+		bookDiv.style.left = `${snapToWidthClue2[snapToWidthClue2.length - 1]}px`;
+		bookDiv.style.top = `${clue2Books.offsetTop}px`;
+		bookPositions[bookDiv.id] = snapToWidthClue2[snapToWidthClue2.length - 1];
+	}
+	allBooks = document.getElementsByClassName('books2');
+	Array.from(allBooks).forEach(function(singleBooks){
+		singleBooks.style.height = actualSizes[0];
+		singleBooks.style.width = actualSizes[1];
+	});
   checkFirstIndicator();
   checkSecondIndicator();
 	checkThirdIndicator();  
