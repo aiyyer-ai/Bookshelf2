@@ -1,7 +1,7 @@
 var trait1Name = `A`;
 var trait2Name = `B`;
 var trait3Name = `C`;
-var historyTitles = [`America's Beginnings: 1700s`, `The Age of Revolution: 1800s`, `The Mechanical Era: 1900s`, `The Information Age: 2000s`];
+var historyTitles = [`America's Beginnings: <br>1700s`, `The Age of Revolution: <br>1800s`, `The Mechanical Era: <br>1900s`, `The Information Age: <br>2000s`];
 var mathTitles = [`Algebra`, `Calculus`];
 var artTitles = [`Modern Art`];
 var clue1Titles1 = [`Roman Empire <br> 220 AD - 476 AD`, `Roman Empire <br> 625 BC - 120 BC`, `Roman Empire <br> 1 AD - 220 AD`, `Roman Empire <br> 120 BC - 1 AD`];
@@ -19,7 +19,7 @@ var gameScreen = document.getElementById("game");
 var totalBooks, correctAnswer;
 var rule1TraitOrder = `ABABACA`;
 var rule1LightsOn = [true, false, false];
-var rule2TraitOrder = `AACAABB`;
+var rule2TraitOrder = `AABAACB`;
 var rule2LightsOn = [false, true, false];
 
 Array.from(allInputs).forEach(function(singleInput){
@@ -32,6 +32,10 @@ Array.from(allInputs).forEach(function(singleInput){
     }
   });
 })
+
+window.onload = (event) => {
+	startGame(["ABACABA"], [4,2,1, "AAAABBC"]);
+}
 
 function tryValues() {
 	var trait1 = document.getElementById("trait1A").value;
@@ -160,11 +164,49 @@ function dragElement(elmnt) {
         elmnt.style.zIndex = `0`;
         elmnt.style.top = `${gameScreen.offsetTop}px`;
         let placeLocation = closest(e.clientX,snapToWidth);
+        if(!Number.isFinite(placeLocation)){
+        	elmnt.style.left = bookPositions[elmnt.id] + "px"; 
+        	return false;
+        }
         let oldLocation = bookPositions[elmnt.id];
         let newLocationBookID = getKeyByValue(bookPositions, placeLocation);
         let newLocationBook = document.getElementById(newLocationBookID);
         newLocationBook.style.left = oldLocation + "px";
-        bookPositions[newLocationBookID] = oldLocation;
+     // THIS WILL BE CODE THAT SHIFTS THINGS OVER
+        if(placeLocation < oldLocation) {
+        	let shiftSnaps = snapToWidth.slice(snapToWidth.indexOf(placeLocation), snapToWidth.indexOf(oldLocation)+1);
+        	let moveNum = 0;
+        	let bookNewPositions = {};
+        	for (const i of shiftSnaps) {
+        		moveNum++;
+        		if(i != shiftSnaps[shiftSnaps.length-1]) {
+			        let newLocationBookID = getKeyByValue(bookPositions, i);
+			        let newLocationBook = document.getElementById(newLocationBookID);
+			        newLocationBook.style.left = `${shiftSnaps[moveNum]}px`;
+			        bookNewPositions[newLocationBookID] = shiftSnaps[moveNum];
+        		}
+        	}
+        	for (const swapper in bookNewPositions) {
+        		bookPositions[swapper] = bookNewPositions[swapper];
+        	}
+        } else if (placeLocation > oldLocation) {
+        	let shiftSnaps = snapToWidth.slice( snapToWidth.indexOf(oldLocation),snapToWidth.indexOf(placeLocation)+1);
+        	let moveNum = 0;
+        	let bookNewPositions = {};
+        	shiftSnaps = shiftSnaps.reverse();
+        	for (const i of shiftSnaps) {
+        		moveNum++;
+        		if(i != shiftSnaps[shiftSnaps.length-1]) {
+			        let newLocationBookID = getKeyByValue(bookPositions, i);
+			        let newLocationBook = document.getElementById(newLocationBookID);
+			        newLocationBook.style.left = `${shiftSnaps[moveNum]}px`;
+			        bookNewPositions[newLocationBookID] = shiftSnaps[moveNum];
+        		}
+        	}
+        	for (const swapper in bookNewPositions) {
+        		bookPositions[swapper] = bookNewPositions[swapper];
+        	}
+        }
         bookPositions[elmnt.id] = placeLocation;
         elmnt.style.left = placeLocation + "px"; 
         let firstCheck = checkFirstIndicator();
@@ -284,11 +326,12 @@ function startGame(permutationArray, startData) {
 		Array.from(allCheckboxes).forEach(function(singleInput){
 			let indicatorLight = document.createElement("div");
 			indicatorLight.classList.add(`indicator`);
-			if(singleIndicator.id == indicatorLights[0].id) {
+			if(singleIndicator.id == indicatorLights[2].id) {
 				indicatorLight.id = `${singleInput.id}Indicator`;		
 			} else{
 				indicatorLight.id = `${singleInput.id}Indicator${Array.from(indicatorLights).indexOf(singleIndicator)}`;
-				if(indicatorLight.id == `rule1Indicator1` || indicatorLight.id == `rule2Indicator2`) {
+				console.log(indicatorLight);
+				if(indicatorLight.id == `rule1Indicator0` || indicatorLight.id == `rule2Indicator1`) {
 					indicatorLight.style.backgroundColor = `#b0e476`;
 				}
 			}
@@ -360,7 +403,9 @@ function startGame(permutationArray, startData) {
 	});
 	let snapPointArray = Object.values(bookPositions);
 	let idArray = Object.keys(bookPositions);
+
 	shuffle(idArray);
+	
 	for (const id of idArray) {
 		let idDiv = document.getElementById(id);
 		idDiv.style.left = `${snapToWidth[idArray.indexOf(id)]}px`;
@@ -398,6 +443,7 @@ function startGame(permutationArray, startData) {
 		snapToWidthClue1.push(Math.ceil(i * snapToDistance) + clue1Books.offsetLeft + 3);
 		bookDiv.style.left = `${snapToWidthClue1[snapToWidthClue1.length - 1]}px`;
 		bookDiv.style.top = `${clue1Books.offsetTop}px`;
+		bookDiv.style.fontSize = `${bookDivHole.clientHeight/1.5}%`;
 		bookPositions[bookDiv.id] = snapToWidthClue1[snapToWidthClue1.length - 1];
 	}
 	let clue2Books = document.getElementById(`clue2Books`);
@@ -432,6 +478,7 @@ function startGame(permutationArray, startData) {
 		snapToWidthClue2.push(Math.ceil(i * snapToDistance) + clue2Books.offsetLeft + 3);
 		bookDiv.style.left = `${snapToWidthClue2[snapToWidthClue2.length - 1]}px`;
 		bookDiv.style.top = `${clue2Books.offsetTop}px`;
+		bookDiv.style.fontSize = `${bookDivHole.clientHeight/1.5}%`;
 		bookPositions[bookDiv.id] = snapToWidthClue2[snapToWidthClue2.length - 1];
 	}
 	allBooks = document.getElementsByClassName('books2');
