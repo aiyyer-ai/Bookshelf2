@@ -341,8 +341,8 @@ function startGame(permutationArray, startData) {
 			singleIndicator.appendChild(indicatorLight);
 		});
 	});
-	gameScreen.style.height = `40vh`;
-	gameScreen.style.width = `90vw`;
+	gameScreen.style.height = `455px`;
+	gameScreen.style.width = `${(gameScreen.style.height.replace(/\D/g,'')/4.9)*7.5}px`;
 	let allClues = document.getElementById(`allClues`);
 	allClues.style.height = `40vh`;
 	allClues.style.width = `90vw`;
@@ -360,16 +360,17 @@ function startGame(permutationArray, startData) {
 			bookNum = 1;
 		}
 		if (allTraits.charAt(i) == `A`) {
-			bookDiv.innerHTML = `${historyTitles[bookNum-1]}`;
+			//bookDiv.innerHTML = `${historyTitles[bookNum-1]}`;
 			bookDiv.altID = `${allTraits.charAt(i)}${bookNum}`;
 		} else if (allTraits.charAt(i) == `B`) {
-			bookDiv.innerHTML = `${mathTitles[bookNum-1]}`;
+			//bookDiv.innerHTML = `${mathTitles[bookNum-1]}`;
 			bookDiv.altID = `${allTraits.charAt(i)}${bookNum}`;
 		} else {
-			bookDiv.innerHTML = `${artTitles[bookNum-1]}`;
+			//bookDiv.innerHTML = `${artTitles[bookNum-1]}`;
 			bookDiv.altID = `${allTraits.charAt(i)}${bookNum}`;
 		}
 		bookDiv.id = `bookDiv${i}`;
+		bookDiv.style.backgroundImage = `url("./allbooks/book${i+1}.png")`; 
 		dragElement(bookDiv);
 		gameScreen.appendChild(bookDivHole);
 		actualSizes[0] = `${bookDivHole.clientHeight}px`;
@@ -398,8 +399,9 @@ function startGame(permutationArray, startData) {
 	}
 	let allBooks = document.getElementsByClassName('books');
 	Array.from(allBooks).forEach(function(singleBooks){
-		singleBooks.style.height = actualSizes[0];
-		singleBooks.style.width = actualSizes[1];
+		singleBooks.style.height = `450px`;
+		singleBooks.style.width = `${singleBooks.style.height.replace(/\D/g,'')/4.9}px`;
+		singleBooks.style.backgroundSize = `${singleBooks.style.width} ${singleBooks.style.height}`;
 	});
 	let snapPointArray = Object.values(bookPositions);
 	let idArray = Object.keys(bookPositions);
