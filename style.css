@@ -1,5 +1,7 @@
 html {
 	background-color: whitesmoke;
+	background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("./allbooks/bg.png");
+	background-size: 100vw 61vh;
 	font-family: Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif; 
 	color: whitesmoke;
 }
@@ -101,6 +103,7 @@ html {
     user-select: none;
 }
 
+
 .lights {
 	background-color: #eccfa2;
 	text-align: center;
@@ -131,6 +134,16 @@ html {
 	opacity: .85;
 }
 
+.allGame {
+	display: flex;
+	margin: auto;
+}
+
+.set {
+	flex: 1;
+	margin: 5px;
+}
+
 .clue {
 	flex: 1;
 	margin: 5px;
@@ -140,13 +153,33 @@ html {
 	cursor:not-allowed;
 }
 
+.others {
+	background-color: #581c20;
+	display: flex;
+	margin: auto;
+	height: 87%;
+	width: 100%;
+}
+
 .glass {
-	width: 93%;
-	opacity: 0;
-	background-color: #231631;
-	box-shadow: inset 0.5em 0.5em 0.5em 0 rgba(0,0,0,0.5), inset -0.5em -0.5em 0.5em 0 rgba(0,0,0,0.5);
-	height: 40%;
-	transform: translate(-1%, 0%);
-    z-index: 1;
-    position: absolute;
+	opacity: 0.4;
+	background-image: repeating-linear-gradient(-30deg, 
+	    #eee 10px,
+	    #eee 12px,
+	    transparent 12px,
+	    transparent 220px);
+	position: absolute;
+	transform: translate(10%, 40%);
+	width: 90%;
+	height: 70%;
+	z-index: 1;
+
+}
+
+.faded {
+	opacity: 0.85;
+}
+
+.set {
+ position: relative;
 }
