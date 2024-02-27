@@ -162,17 +162,20 @@ html {
 }
 
 .glass {
-	opacity: 0.4;
-	background-image: repeating-linear-gradient(-30deg, 
-	    #eee 10px,
-	    #eee 12px,
-	    transparent 12px,
-	    transparent 220px);
+	opacity: 0.5;
+	background-image: url("./allbooks/otherimages/glasstexture3.png");
 	position: absolute;
-	transform: translate(10%, 40%);
-	width: 90%;
-	height: 70%;
+	background-image: repeating-linear-gradient(-30deg, 
+	    #eee 1px,
+	    #eee 10px,
+	    transparent 50px,
+	    transparent 250px);
+	width: 100%;
+	height: 100%;
 	z-index: 1;
+	filter: blur(2px);
+	backdrop-filter: blur(5px);
+	box-shadow: inset 0 0 100px #4d5659, inset 0 0 50px #4d5659, inset 0 0 10px #4d5659, ;
 
 }
 
